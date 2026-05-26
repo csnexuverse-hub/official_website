@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CS Development & Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #0f0f1a;
+      --bg3: #12121f;
+      --surface: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --border2: rgba(255, 255, 255, 0.14);
+      --accent: #6366f1;
+      --accent2: #818cf8;
+      --accent3: rgba(99, 102, 241, 0.15);
+      --text: #f1f5f9;
+      --text2: #94a3b8;
+      --text3: #64748b;
+      --ff-head: 'Syne', sans-serif;
+      --ff-body: 'DM Sans', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--ff-body);
+      min-height: 100vh;
+      overflow-x: hidden
+    }
+
+    /* ── NAVBAR ── */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 2rem;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none
+    }
+
+    .nav-logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-head);
+      font-weight: 800;
+      font-size: 15px;
+      color: #fff;
+      letter-spacing: -0.5px
+    }
+
+    .nav-logo-text {
+      font-family: var(--ff-head);
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      letter-spacing: 0.02em
+    }
+
+    .nav-logo-text span {
+      color: var(--accent2)
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px
+    }
+
+    .nav-link-item {
+      font-family: var(--ff-body);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text2);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: color .2s, background .2s;
+      letter-spacing: 0.01em
+    }
+
+    .nav-link-item:hover {
+      color: var(--text);
+      background: var(--surface)
+    }
+
+    .nav-cta {
+      font-family: var(--ff-head);
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+      padding: 9px 20px;
+      background: var(--accent);
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+      transition: opacity .2s, transform .2s
+    }
+
+    .nav-cta:hover {
+      opacity: .88;
+      transform: translateY(-1px)
+    }
+
+    .nav-mobile-btn {
+      display: none;
+      background: none;
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: var(--text);
+      cursor: pointer;
+      font-family: var(--ff-head);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em
+    }
+
+    /* ── HERO ── */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 120px 4rem 6rem;
+      position: relative;
+      overflow: hidden;
+      gap: 0
+    }
+
+    .hero-left {
+      flex: 1 1 45%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 10
+    }
+
+    .hero-right {
+      flex: 1 1 55%;
+      position: relative;
+      min-height: 600px;
+      height: 80vh;
+      max-height: 750px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: -4rem;
+      margin-top: -2rem;
+      margin-bottom: -2rem
+    }
+
+    .hero-robot-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+      overflow: hidden
+    }
+
+    .hero-robot-container spline-viewer {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transform: scale(1.4);
+      transform-origin: center center
+    }
+
+    /* Hide the "Built with Spline" watermark */
+    .hero-robot-container spline-viewer::part(logo) {
+      display: none !important
+    }
+
+    .hero-robot-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 5;
+      transition: opacity 0.6s ease, visibility 0.6s ease
+    }
+
+    .hero-robot-loader.loaded {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none
+    }
+
+    .robot-spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(99, 102, 241, 0.15);
+      border-top-color: var(--accent2);
+      border-radius: 50%;
+      animation: robotSpin 0.8s linear infinite
+    }
+
+    .robot-loader-text {
+      font-family: var(--ff-body);
+      font-size: 13px;
+      color: var(--text3);
+      letter-spacing: 0.05em
+    }
+
+    @keyframes robotSpin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* Spotlight SVG overlay */
+    .hero-spotlight {
+      pointer-events: none;
+      position: absolute;
+      z-index: 1;
+      top: -40px;
+      left: 0;
+      width: 138%;
+      height: 169%;
+      opacity: 0;
+      animation: spotlightIn 2s ease forwards 0.3s
+    }
+
+    @keyframes spotlightIn {
+      to {
+        opacity: 1
+      }
+    }
+
+    .hero-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 80% 60% at 60% 40%, black 0%, transparent 80%)
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -10%;
+      right: -5%;
+      width: 55%;
+      height: 70%;
+      background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
+      pointer-events: none
+    }
+
+    .hero-glow2 {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40%;
+      height: 50%;
+      background: radial-gradient(ellipse at bottom left, rgba(129, 140, 248, 0.08) 0%, transparent 70%);
+      pointer-events: none
+    }
+
+    .hero-right-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 80%;
+      background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0.04) 40%, transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(40px)
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--ff-body);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent2);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      padding: 6px 14px;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 100px;
+      background: rgba(99, 102, 241, 0.06)
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent2);
+      flex-shrink: 0
+    }
+
+    .hero-title {
+      font-family: var(--ff-head);
+      font-size: clamp(3rem, 6.5vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      max-width: 800px;
+      margin-bottom: 28px
+    }
+
+    .hero-title .hl {
+      background: linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .hero-sub {
+      font-family: var(--ff-body);
+      font-size: 1.125rem;
+      font-weight: 300;
+      color: var(--text2);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 44px
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap
+    }
+
+    .btn-primary {
+      font-family: var(--ff-head);
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+      padding: 14px 28px;
+      background: var(--accent);
+      border-radius: 8px;
+      letter-spacing: 0.04em;
+      transition: all .25s;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .btn-primary:hover {
+      background: #5254cc;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35)
+    }
+
+    .btn-ghost {
+      font-family: var(--ff-head);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text2);
+      text-decoration: none;
+      padding: 14px 28px;
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      letter-spacing: 0.04em;
+      transition: all .25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--surface)
+    }
+
+    .hero-stats {
+      position: absolute;
+      bottom: 3rem;
+      right: 4rem;
+      display: flex;
+      gap: 2rem
+    }
+
+    .hero-stat {
+      text-align: right
+    }
+
+    .hero-stat-num {
+      font-family: var(--ff-head);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.04em
+    }
+
+    .hero-stat-num span {
+      color: var(--accent2)
+    }
+
+    .hero-stat-label {
+      font-family: var(--ff-body);
+      font-size: 12px;
+      color: var(--text3);
+      letter-spacing: 0.05em;
+      text-transform: uppercase
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 3rem;
+      left: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text3);
+      font-size: 12px;
+      font-family: var(--ff-body);
+      letter-spacing: 0.08em;
+      text-transform: uppercase
+    }
+
+    .hero-scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--text3)
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 7rem 4rem
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--ff-head);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 16px
+    }
+
+    .section-label::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--accent2)
+    }
+
+    .section-title {
+      font-family: var(--ff-head);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 20px
+    }
+
+    .section-sub {
+      font-family: var(--ff-body);
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text2);
+      line-height: 1.7;
+      max-width: 480px
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--bg2)
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      margin-top: 4rem;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden
+    }
+
+    .service-card {
+      background: var(--bg2);
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: background .3s;
+      cursor: default
+    }
+
+    .service-card:hover {
+      background: var(--bg3)
+    }
+
+    .service-card+.service-card {
+      border-left: 1.5px solid var(--border)
+    }
+
+    .service-card:nth-child(n+4) {
+      border-top: 1.5px solid var(--border)
+    }
+
+    @media(max-width:860px) {
+      .service-card+.service-card {
+        border-left: none;
+        border-top: 1.5px solid var(--border)
+      }
+    }
+
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--accent3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      font-size: 20px
+    }
+
+    .service-name {
+      font-family: var(--ff-head);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em
+    }
+
+    .service-desc {
+      font-family: var(--ff-body);
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: var(--text2);
+      line-height: 1.65
+    }
+
+    .service-tag {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--ff-head);
+      letter-spacing: 0.08em;
+      color: var(--accent2);
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 4px
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--bg)
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      margin-top: 4rem
+    }
+
+    .about-visual {
+      position: relative;
+      height: 460px
+    }
+
+    .about-card-main {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 2.5rem
+    }
+
+    .about-card-main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      pointer-events: none
+    }
+
+    .about-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--ff-body);
+      font-size: 12px;
+      color: var(--accent2);
+      background: var(--accent3);
+      border-radius: 6px;
+      padding: 6px 12px;
+      margin-bottom: 1.5rem;
+      width: fit-content
+    }
+
+    .about-big-num {
+      font-family: var(--ff-head);
+      font-size: 5rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.05em;
+      line-height: 1
+    }
+
+    .about-big-num span {
+      color: var(--accent2)
+    }
+
+    .about-big-label {
+      font-family: var(--ff-body);
+      font-size: 0.875rem;
+      color: var(--text2);
+      margin-top: 8px
+    }
+
+    .about-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto
+    }
+
+    .about-pill {
+      font-family: var(--ff-body);
+      font-size: 12px;
+      color: var(--text2);
+      padding: 6px 14px;
+      border: 1px solid var(--border2);
+      border-radius: 100px
+    }
+
+    .about-content {}
+
+    .about-text {
+      font-family: var(--ff-body);
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text2);
+      line-height: 1.8;
+      margin-bottom: 2.5rem
+    }
+
+    .about-features {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem
+    }
+
+    .about-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px
+    }
+
+    .about-feature-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 7px
+    }
+
+    .about-feature-text {
+      font-family: var(--ff-body);
+      font-size: 0.9rem;
+      color: var(--text2);
+      line-height: 1.6
+    }
+
+    .about-feature-text strong {
+      color: var(--text);
+      font-weight: 500
+    }
+
+    /* ── PROCESS ── */
+    .process-section {
+      background: var(--bg2);
+      padding: 7rem 4rem
+    }
+
+    .process-steps {
+      display: flex;
+      gap: 0;
+      margin-top: 4rem;
+      position: relative
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 28px;
+      right: 28px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent 70%)
+    }
+
+    .process-step {
+      flex: 1;
+      padding: 0 1.5rem;
+      position: relative
+    }
+
+    .process-step:first-child {
+      padding-left: 0
+    }
+
+    .process-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1px solid var(--border2);
+      background: var(--bg2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-head);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--accent2);
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1
+    }
+
+    .process-step-title {
+      font-family: var(--ff-head);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em
+    }
+
+    .process-step-desc {
+      font-family: var(--ff-body);
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: var(--text3);
+      line-height: 1.6
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-section {
+      padding: 7rem 4rem;
+      background: var(--bg)
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 4rem
+    }
+
+    .testimonial-card {
+      padding: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg3);
+      transition: border-color .2s
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--border2)
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 1rem
+    }
+
+    .star {
+      color: var(--accent2);
+      font-size: 14px
+    }
+
+    .testimonial-text {
+      font-family: var(--ff-body);
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--text2);
+      line-height: 1.7;
+      margin-bottom: 1.5rem
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .author-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent3);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-head);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent2)
+    }
+
+    .author-name {
+      font-family: var(--ff-head);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .author-role {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      color: var(--text3)
+    }
+
+    /* ── CONNECT ── */
+    #connect {
+      background: var(--bg2);
+      padding: 7rem 4rem;
+      text-align: center
+    }
+
+    .connect-inner {
+      max-width: 600px;
+      margin: 0 auto
+    }
+
+    .connect-title {
+      font-family: var(--ff-head);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 20px
+    }
+
+    .connect-title .hl {
+      color: var(--accent2)
+    }
+
+    .connect-sub {
+      font-family: var(--ff-body);
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text2);
+      line-height: 1.7;
+      margin-bottom: 44px
+    }
+
+    .connect-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 3rem
+    }
+
+    .connect-card {
+      padding: 1.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg3)
+    }
+
+    .connect-card-icon {
+      font-size: 22px;
+      margin-bottom: 10px
+    }
+
+    .connect-card-label {
+      font-family: var(--ff-head);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      margin-bottom: 6px
+    }
+
+    .connect-card-detail {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      color: var(--text3)
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem
+    }
+
+    .footer-brand {
+      font-family: var(--ff-head);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text2)
+    }
+
+    .footer-brand span {
+      color: var(--accent2)
+    }
+
+    .footer-note {
+      font-family: var(--ff-body);
+      font-size: 12px;
+      color: var(--text3)
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: .6
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    .hero-eyebrow {
+      animation: fadeUp .6s ease both .1s
+    }
+
+    .hero-title {
+      animation: fadeUp .7s ease both .2s
+    }
+
+    .hero-sub {
+      animation: fadeUp .7s ease both .35s
+    }
+
+    .hero-actions {
+      animation: fadeUp .7s ease both .5s
+    }
+
+    .hero-stats {
+      animation: fadeUp .7s ease both .65s
+    }
+
+    .hero-scroll {
+      animation: fadeUp .7s ease both .75s
+    }
+
+    .hero-eyebrow::before {
+      animation: pulse 2s ease infinite
+    }
+
+    @media(max-width:768px) {
+      #home {
+        flex-direction: column;
+        padding: 120px 1.5rem 5rem;
+        gap: 1rem
+      }
+
+      .hero-left {
+        order: 1
+      }
+
+      .hero-right {
+        order: 2;
+        min-height: 340px;
+        width: 100%
+      }
+
+      .hero-stats {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        order: 3;
+        justify-content: center;
+        margin-top: 1rem
+      }
+
+      .hero-scroll {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        order: 4;
+        justify-content: center;
+        margin-top: 0.5rem
+      }
+
+      section,
+      .process-section,
+      .testimonials-section,
+      #connect {
+        padding: 5rem 1.5rem
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem
+      }
+
+      .about-visual {
+        height: 320px
+      }
+
+      .process-steps {
+        flex-direction: column;
+        gap: 2rem
+      }
+
+      .process-steps::before {
+        display: none
+      }
+
+      .connect-cards {
+        grid-template-columns: 1fr
+      }
+
+      footer {
+        flex-direction: column;
+        text-align: center
+      }
+
+      .nav-links {
+        display: none
+      }
+
+      .nav-mobile-btn {
+        display: flex
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="site-header" id="site-header">
+    <a href="#home" class="nav-logo">
+      <div class="nav-logo-mark">CS</div>
+      <div class="nav-logo-text">CS Dev<span> &amp; Solutions</span></div>
+    </a>
+    <nav class="nav-links">
+      <a href="#home" class="nav-link-item">Home</a>
+      <a href="#services" class="nav-link-item">Services</a>
+      <a href="#about" class="nav-link-item">About</a>
+    </nav>
+    <a href="https://forms.google.com" target="_blank" class="nav-cta">Connect With Us →</a>
+    <button class="nav-mobile-btn" onclick="document.querySelector('.nav-links').style.display='flex'">Menu</button>
+  </header>
+
+  <!-- HERO -->
+  <section id="home">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+
+    <!-- Spotlight SVG -->
+    <svg class="hero-spotlight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3787 2842" fill="none">
+      <g filter="url(#heroSpotFilter)">
+        <ellipse cx="1924.71" cy="273.501" rx="1924.71" ry="273.501"
+          transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)" fill="white" fill-opacity="0.21" />
+      </g>
+      <defs>
+        <filter id="heroSpotFilter" x="0.860352" y="0.838989" width="3785.16" height="2840.26"
+          filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur stdDeviation="151" result="effect1_foregroundBlur" />
+        </filter>
+      </defs>
+    </svg>
+
+    <!-- Left: Text Content -->
+    <div class="hero-left">
+      <div class="hero-eyebrow">Academic Guidance &amp; Solutions</div>
+      <h1 class="hero-title">
+        Master your field<br>
+        with <span class="hl">expert-led</span><br>
+        mentorship
+      </h1>
+      <p class="hero-sub">
+        Personalised one-on-one guidance for graduation, PhD students and professionals. From concept to completion — we
+        solve the hard problems with you.
+      </p>
+      <div class="hero-actions">
+        <a href="https://forms.google.com" target="_blank" class="btn-primary">Get Started Free →</a>
+        <a href="#services" class="btn-ghost">Explore Services</a>
+      </div>
+    </div>
+
+    <!-- Right: 3D Robot -->
+    <div class="hero-right">
+      <div class="hero-right-glow"></div>
+      <div class="hero-robot-container">
+        <div class="hero-robot-loader" id="robotLoader">
+          <div class="robot-spinner"></div>
+          <div class="robot-loader-text">Loading 3D model…</div>
+        </div>
+        <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" id="spline3d"></spline-viewer>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">50<span>+</span></div>
+        <div class="hero-stat-label">Students Guided</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">98<span>%</span></div>
+        <div class="hero-stat-label">Satisfaction Rate</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">12<span>+</span></div>
+        <div class="hero-stat-label">Domains Covered</div>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      Scroll to explore
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">Every tool you need<br>to succeed academically</h2>
+    <p class="section-sub">Structured programmes built for real outcomes — not just information, but transformation.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🎯</div>
+        <div class="service-name">One-on-One Sessions</div>
+        <div class="service-desc">Dedicated sessions with your mentor, focused entirely on your specific project,
+          thesis, or coursework. No templates, no generic advice.</div>
+        <div class="service-tag">Personalised</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎓</div>
+        <div class="service-name">Academic Guidance</div>
+        <div class="service-desc">Full-cycle support for graduation and PhD students — from research methodology,
+          literature review to final presentation prep.</div>
+        <div class="service-tag">Comprehensive</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🛠️</div>
+        <div class="service-name">Project Solutions</div>
+        <div class="service-desc">Stuck on implementation? We work through your technical and conceptual problems
+          hands-on, ensuring you truly understand the solution.</div>
+        <div class="service-tag">Hands-On</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📝</div>
+        <div class="service-name">Quizzes &amp; Tests</div>
+        <div class="service-desc">Regular assessments that track your real progress — not just memorisation. Smart
+          questions that build genuine confidence in the subject.</div>
+        <div class="service-tag">Assessment</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏆</div>
+        <div class="service-name">Certifications</div>
+        <div class="service-desc">Complete a full course of guided learning and earn a certification that validates your
+          growth, knowledge, and problem-solving capability.</div>
+        <div class="service-tag">Credentialed</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚡</div>
+        <div class="service-name">Rapid Problem Solving</div>
+        <div class="service-desc">Facing a deadline? Our experts jump in fast — diagnosing your bottleneck and unlocking
+          a clear path forward without wasting your time.</div>
+        <div class="service-tag">On-Demand</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process-section">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">Simple steps,<br>serious results</h2>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-num">01</div>
+        <div class="process-step-title">Connect With Us</div>
+        <div class="process-step-desc">Fill the quick Google Form and tell us your subject, current challenge, and
+          goals.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">02</div>
+        <div class="process-step-title">Meet Your Mentor</div>
+        <div class="process-step-desc">We match you with a specialist who understands your exact domain and level.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">03</div>
+        <div class="process-step-title">Guided Learning</div>
+        <div class="process-step-desc">Live sessions, structured modules, quizzes and continuous feedback — all tailored
+          to you.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">04</div>
+        <div class="process-step-title">Earn Certification</div>
+        <div class="process-step-desc">Complete the course, pass the final assessment, and walk away with verified
+          credentials.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-visual">
+        <div class="about-card-main">
+          <div class="about-badge">⚡ Founded with purpose</div>
+          <div class="about-big-num">5<span>+</span></div>
+          <div class="about-big-label">Years of combined academic expertise</div>
+          <div class="about-pills" style="margin-top:auto">
+            <div class="about-pill">Computer Science</div>
+            <div class="about-pill">Data Science</div>
+            <div class="about-pill">Machine Learning</div>
+            <div class="about-pill">Software Engineering</div>
+            <div class="about-pill">Research Methods</div>
+            <div class="about-pill">Mathematics</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-content">
+        <div class="section-label">Our Story</div>
+        <h2 class="section-title">Built by academics, for academics</h2>
+        <p class="about-text">CS Development &amp; Solutions was born from a simple frustration — students with
+          brilliant minds getting stuck not because they lacked intelligence, but because they lacked the right guidance
+          at the right time. We bridge that gap with structured, human-first mentorship that actually builds mastery.
+        </p>
+        <div class="about-features">
+          <div class="about-feature">
+            <div class="about-feature-dot"></div>
+            <div class="about-feature-text"><strong>Domain-specific mentors</strong> — every student is matched with
+              someone who specialises in their exact field, not a generalist.</div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-dot"></div>
+            <div class="about-feature-text"><strong>Outcome-first methodology</strong> — we measure success by your
+              confidence and results, not by session count.</div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-dot"></div>
+            <div class="about-feature-text"><strong>Flexible scheduling</strong> — sessions that fit around your
+              university timetable, not the other way around.</div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-dot"></div>
+            <div class="about-feature-text"><strong>Full transparency</strong> — you always know where you stand, what
+              you've learned, and what comes next.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="section-label">Student Voices</div>
+    <h2 class="section-title">What our students say</h2>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+            class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testimonial-text">"The one-on-one sessions were a complete game changer. My mentor didn't just give me
+          answers — he made sure I understood every step. I defended my dissertation with full confidence."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AR</div>
+          <div>
+            <div class="author-name">Ayaan Raza</div>
+            <div class="author-role">PhD Student, Computer Science</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+            class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testimonial-text">"I was three weeks from my submission deadline and completely stuck on my ML
+          project. CS Dev stepped in, helped me debug the architecture, and I submitted on time with a result I'm proud
+          of."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SK</div>
+          <div>
+            <div class="author-name">Sara Khan</div>
+            <div class="author-role">Masters Student, Data Science</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+            class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testimonial-text">"The certification at the end meant a lot to me — it felt like a real milestone. The
+          quizzes throughout kept me honest about what I actually knew versus what I thought I knew."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">PM</div>
+          <div>
+            <div class="author-name">Priya Mehta</div>
+            <div class="author-role">Final Year, Software Engineering</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONNECT -->
+  <section id="connect">
+    <div class="connect-inner">
+      <div class="section-label" style="justify-content:center;margin-bottom:20px">Get In Touch</div>
+      <h2 class="connect-title">Ready to level up<br>your <span class="hl">academic journey</span>?</h2>
+      <p class="connect-sub">Tell us about your current challenge and goals. We'll get back to you within 24 hours to
+        set up your first session — completely free.</p>
+
+      <div class="connect-cards">
+        <div class="connect-card">
+          <div class="connect-card-icon">🕐</div>
+          <div class="connect-card-label">Fast Response</div>
+          <div class="connect-card-detail">We reply within 24 hours</div>
+        </div>
+        <div class="connect-card">
+          <div class="connect-card-icon">🔒</div>
+          <div class="connect-card-label">Private & Safe</div>
+          <div class="connect-card-detail">Your details are confidential</div>
+        </div>
+        <div class="connect-card">
+          <div class="connect-card-icon">💬</div>
+          <div class="connect-card-label">Free First Session</div>
+          <div class="connect-card-detail">No commitment to start</div>
+        </div>
+      </div>
+
+      <a href="https://forms.google.com" target="_blank" class="btn-primary"
+        style="margin:0 auto;font-size:15px;padding:16px 36px">
+        Fill the Connect Form →
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">CS Dev <span>&amp; Solutions</span> — Academic Mentorship</div>
+    <div class="footer-note">© 2024 CS Development &amp; Solutions. All rights reserved.</div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('site-header');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > 80) {
+        header.style.background = 'rgba(10,10,15,0.97)';
+      } else {
+        header.style.background = 'rgba(10,10,15,0.85)';
+      }
+      lastY = y;
+    }, { passive: true });
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.service-card,.testimonial-card,.process-step,.about-feature').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity .5s ease, transform .5s ease';
+      observer.observe(el);
+    });
+
+    // Hide robot loader once the Spline scene loads
+    const splineEl = document.getElementById('spline3d');
+    const loaderEl = document.getElementById('robotLoader');
+    if (splineEl) {
+      splineEl.addEventListener('load', () => {
+        if (loaderEl) loaderEl.classList.add('loaded');
+      });
+      // Fallback: hide loader after 8 seconds even if event doesn't fire
+      setTimeout(() => {
+        if (loaderEl) loaderEl.classList.add('loaded');
+      }, 8000);
+    }
+  </script>
+</body>
+
+</html>
